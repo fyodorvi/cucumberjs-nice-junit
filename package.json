@@ -1,0 +1,12 @@
+{
+  "name": "cucumberjs-nice-junit",
+  "version": "1.0.2",
+  "main": "index.js",
+  "repository": "https://github.com/fyodorvi/cucumberjs-nice-junit.git",
+  "author": "Fyodor Yakimchouk <fyodor.yakimchouk@clearpoint.co.nz>",
+  "license": "MIT",
+  "dependencies": {
+    "junit-report-builder": "1.1.1",
+    "lodash": "4.17.4"
+  }
+}
