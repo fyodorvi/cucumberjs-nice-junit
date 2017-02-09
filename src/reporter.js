@@ -6,7 +6,7 @@ function cucumberJUnitReporter(providedConfig, builder) {
     const config = _.defaults(providedConfig || {}, {
         reportDir: 'test_reports',
         reportPrefix: 'TEST-',
-        reportSuffix: '.junit',
+        reportSuffix: '.xml',
         reportFile: 'test_results.xml',
         oneReportPerFeature: true,
         numberSteps: true
