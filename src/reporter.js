@@ -9,7 +9,8 @@ function cucumberJUnitReporter(providedConfig, builder) {
         reportSuffix: '.xml',
         reportFile: 'test_results.xml',
         oneReportPerFeature: true,
-        numberSteps: true
+        numberSteps: true,
+        errorIncludeOutput: false
     });
 
     let suite = builder;
@@ -147,7 +148,7 @@ function cucumberJUnitReporter(providedConfig, builder) {
                 testCase.failure(scenarioFailureException).time(formatTime(scenarioDuration || 0)).standardOutput(output);
 
                 if (scenarioFailureExceptionStack) {
-                    testCase.stacktrace(scenarioFailureExceptionStack);
+                    testCase.stacktrace(scenarioFailureExceptionStack + (config.errorIncludeOutput ? '\n\n' + output : ''));
                 }
             } else if (scenarioSkipped) {
                 testCase.skipped().standardOutput(output);

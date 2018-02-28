@@ -40,7 +40,8 @@ defineSupportCode(function(cucumber) {
        reportSuffix: '.xml',
        reportFile: 'test_results.xml',
        oneReportPerFeature: true,
-       numberSteps: true
+       numberSteps: true,
+       errorIncludeOutput: false
    });
 });
 ```
