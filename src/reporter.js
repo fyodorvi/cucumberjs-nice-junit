@@ -56,7 +56,7 @@ function cucumberJUnitReporter(providedConfig, builder) {
             }
             name += stepCount + '. ';
         }
-        name += step.getKeyword() + step.getName();
+        name += step.keywor + step.name;
         return name;
     }
 
@@ -69,18 +69,16 @@ function cucumberJUnitReporter(providedConfig, builder) {
 
     function registerHandlers() {
 
-        this.registerHandler('BeforeFeature', function (event, callback) {
-            let feature = event.getPayloadItem('feature');
-            featureName = feature.getName();
-            featurePath = path.relative(process.cwd(), feature.getUri());
+        this.registerHandler('BeforeFeature', function (feature, callback) {
+            featureName = feature.name;
+            featurePath = path.relative(process.cwd(), feature.uri);
             suite = builder.testSuite().name(featureName);
             featureDuration = 0;
             callback();
         });
 
-        this.registerHandler('BeforeScenario', function (event, callback) {
-            let scenario = event.getPayloadItem('scenario');
-            scenarioName = scenario.getName();
+        this.registerHandler('BeforeScenario', function (scenario, callback) {
+            scenarioName = scenario.name;
             scenarioDuration = 0;
             scenarioOutput = [];
             scenarioFailed = false;
@@ -88,26 +86,25 @@ function cucumberJUnitReporter(providedConfig, builder) {
             callback();
         });
 
-        this.registerHandler('StepResult', function (event, callback) {
-            let stepResult = event.getPayloadItem('stepResult');
-            let step = stepResult.getStep();
-            let stepName = step.getName();
+        this.registerHandler('StepResult', function (stepResult, callback) {
+            let step = stepResult.step;
+            let stepName = step.name;
 
             if (!stepName) {
                 callback();
                 return;
             }
 
-            scenarioDuration += stepResult.getDuration();
-            scenarioResult = stepResult.getStatus();
+            scenarioDuration += stepResult.duration;
+            scenarioResult = stepResult.status;
 
 
-            scenarioOutput.push({ stepName, status: stepResult.getStatus()});
+            scenarioOutput.push({ stepName, status: stepResult.status});
 
-            if (stepResult.getStatus() == 'failed') {
+            if (stepResult.status == 'failed') {
                 scenarioFailed = true;
 
-                let failureException = stepResult.getFailureException();
+                let failureException = stepResult.failureException;
                 scenarioOutput.push(failureException);
 
                 scenarioFailureException = failureException;
@@ -119,7 +116,7 @@ function cucumberJUnitReporter(providedConfig, builder) {
                 scenarioOutput.push('');
             }
 
-            if (stepResult.getStatus() == 'skipped' && !scenarioFailed) {
+            if (stepResult.status == 'skipped' && !scenarioFailed) {
                 scenarioSkipped = true;
             }
 
@@ -127,9 +124,8 @@ function cucumberJUnitReporter(providedConfig, builder) {
             callback();
         });
 
-        this.registerHandler('AfterScenario', function (event, callback) {
-            let scenario = event.getPayloadItem('scenario');
-            scenarioName = scenario.getName();
+        this.registerHandler('AfterScenario', function (scenario, callback) {
+            scenarioName = scenario.name;
 
             let testCase = suite.testCase()
                 .className(featureName)
@@ -140,12 +136,12 @@ function cucumberJUnitReporter(providedConfig, builder) {
 
             _.forEach(scenarioOutput, (line, key) => {
                 if (line.stepName) {
-                    output += line.stepName + '.'.repeat(Math.max(1, longest - (line.stepName.length + line.status.length))) + line.status;
-                    if (key != scenarioOutput.length-1) {
-                        output += '\n';
-                    }
+                output += line.stepName + '.'.repeat(Math.max(1, longest - (line.stepName.length + line.status.length))) + line.status;
+                if (key != scenarioOutput.length-1) {
+                    output += '\n';
                 }
-            });
+            }
+        });
 
             if (scenarioFailed) {
                 testCase.failure(scenarioFailureException).time(formatTime(scenarioDuration || 0)).standardOutput(output);

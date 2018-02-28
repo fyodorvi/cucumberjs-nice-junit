@@ -1,7 +1,7 @@
 {
   "name": "cucumberjs-nice-junit",
-  "version": "1.0.3",
-  "main": "index.js",
+  "version": "2.0.0",
+  "main": "src/index.js",
   "repository": "https://github.com/fyodorvi/cucumberjs-nice-junit.git",
   "author": "Fyodor Yakimchouk <fyodor.yakimchouk@clearpoint.co.nz>",
   "license": "MIT",
